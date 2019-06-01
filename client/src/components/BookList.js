@@ -1,4 +1,15 @@
 import React from 'react';
+import { gql } from 'apollo-boost'; // for parsing query string into a query doc
+import { graphql } from 'react-apollo'; // view layer integration for React
+
+const getBooksQuery = gql`
+  {
+    books{
+      name
+      id
+    }
+  }
+`
 
 const BookList = () => {
   return (
@@ -10,4 +21,4 @@ const BookList = () => {
   );
 }
 
-export default BookList;
+export default graphql(getBooksQuery)(BookList);
