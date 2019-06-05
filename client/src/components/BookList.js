@@ -1,15 +1,6 @@
 import React from 'react';
-import { gql } from 'apollo-boost'; // for parsing query string into a query doc
 import { graphql } from 'react-apollo'; // view layer integration for React
-
-const getBooksQuery = gql`
-  {
-    books{
-      name
-      id
-    }
-  }
-`
+import { getBooksQuery } from '../queries/queries';
 
 const BookList = (props) => {
   const displayBooks = () => {

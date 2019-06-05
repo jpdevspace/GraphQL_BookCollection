@@ -1,19 +1,16 @@
-import React from 'react';
-import { gql } from 'apollo-boost'; // for parsing query string into a query doc
+import React, { Component } from 'react';
 import { graphql } from 'react-apollo'; // view layer integration for React
+import { getAuthorsQuery } from '../queries/queries';
 
-const getAuthorsQuery = gql`
-    {
-        authors{
-            name
-            id
-        }
+class AddBook extends Component {
+    state = {
+        name: '',
+        genre: '',
+        authorId: ''
     }
-`
 
-const AddBook = (props) => {
-    const displayAuthors = () => {
-        const { data } = props;
+    displayAuthors = () => {
+        const { data } = this.props;
 
         if (data.loading) {
           return (<option disabled>Loading authors</option>)
@@ -23,26 +20,36 @@ const AddBook = (props) => {
           ));
         }
     }
-    return (
-        <form id="add-book">
-            <div className="field">
-                <label htmlFor="">Book Name:</label>
-                <input type="text"/>
-            </div>
-            <div className="field">
-                <label htmlFor="">Genre:</label>
-                <input type="text"/>
-            </div>
-            <div className="field">
-                <label htmlFor="">Author:</label>
-                <select>
-                    <option value="">Select author</option>
-                    { displayAuthors() }
-                </select>
-            </div>
-            <button>+</button>
-        </form>
-    );
+
+    handleInputChange = (e) => {
+        const { name, value } = e.target;
+        this.setState({
+            [name]: value
+        });
+    }
+
+    render() {
+        return (
+            <form id="add-book">
+                <div className="field">
+                    <label htmlFor="name">Book Name:</label>
+                    <input id="name" name="name" type="text" onChange={e => this.handleInputChange(e)}/>
+                </div>
+                <div className="field">
+                    <label htmlFor="genre">Genre:</label>
+                    <input id="genre" name="genre" type="text" onChange={e => this.handleInputChange(e)}/>
+                </div>
+                <div className="field">
+                    <label htmlFor="authorId">Author:</label>
+                    <select name="authorId" onChange={e => this.handleInputChange(e)}>
+                        <option value="">Select author</option>
+                        { this.displayAuthors() }
+                    </select>
+                </div>
+                <button>+</button>
+            </form>
+        );
+    }
 }
 
 export default graphql(getAuthorsQuery)(AddBook);
